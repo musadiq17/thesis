@@ -5,13 +5,15 @@ from nltk.corpus import stopwords
 from string import punctuation
 from nltk.stem import PorterStemmer
 from nltk.tokenize.treebank import TreebankWordDetokenizer
+from collections import Counter
 punct = set(punctuation)
 stop_words = set(stopwords.words("english"))
 port = PorterStemmer()
 detoken = ''
 
 
-with open('test.csv', 'r') as csv_file:
+
+with open('Ambari.csv', 'r') as csv_file:
     csv_reader = csv.reader(csv_file)
 
 # ---calculate the TF--
@@ -31,7 +33,9 @@ with open('test.csv', 'r') as csv_file:
 
         bug = summary + description
         lowerBug = bug.lower()
-        tokenized_stop = lowerBug.split()
+
+        tokenized_stop = word_tokenize(lowerBug)
+
         tokenizedWord = [w for w in tokenized_stop if not w in stop_words and not w in punct]
         tokenizedWord = []
         for w in tokenized_stop:
@@ -72,7 +76,7 @@ with open('test.csv', 'r') as csv_file:
 
 # First: put togather all sentance and tokenize them
     allDocuments = ''
-with open('test.csv', 'r') as csv_file:
+with open('Ambari.csv', 'r') as csv_file:
     csv_reader = csv.reader(csv_file)
 
 
@@ -82,7 +86,7 @@ with open('test.csv', 'r') as csv_file:
         description = sentence[14]
         bug = summary + description
         lowerBug = bug.lower()
-        tokenized_stop = lowerBug.split()
+        tokenized_stop = word_tokenize(lowerBug)
         tokenizedWord = [w for w in tokenized_stop if not w in stop_words and not w in punct]
         tokenizedWord = []
         for w in tokenized_stop:
@@ -98,7 +102,8 @@ with open('test.csv', 'r') as csv_file:
 
         allDocuments += detoken + ' '
     #print(allDocuments)
-    allDocumentsTokenized = allDocuments.split(' ')
+
+    allDocumentsTokenized = word_tokenize(allDocuments)
     #print(allDocumentsTokenized)
     allDocumentsNoDublicates = []
     for word in allDocumentsTokenized:
@@ -108,7 +113,7 @@ with open('test.csv', 'r') as csv_file:
 
 #second: calculate the number of documents where term t appear
 dictOfNoOfDocumentsWithTermInside = {}
-with open('test.csv', 'r') as csv_file:
+with open('Ambari.csv', 'r') as csv_file:
     csv_reader = csv.reader(csv_file)
     detokenizedWord = []
     for index, sentence in enumerate(csv_reader):
@@ -117,7 +122,7 @@ with open('test.csv', 'r') as csv_file:
         description = sentence[14]
         bug = summary + description
         lowerBug = bug.lower()
-        tokenized_stop = lowerBug.split()
+        tokenized_stop = word_tokenize(lowerBug)
         tokenizedWord = [w for w in tokenized_stop if not w in stop_words and not w in punct]
         tokenizedWord = []
 
@@ -144,7 +149,6 @@ with open('test.csv', 'r') as csv_file:
                 count += 1
                 #print(voc)
         dictOfNoOfDocumentsWithTermInside[index] = (voc, count)
-    #print(dictOfNoOfDocumentsWithTermInside)
 
 
 
@@ -156,7 +160,8 @@ with open('test.csv', 'r') as csv_file:
         for word in normalizeTermFrequency[i]:
             for x in range(0, len(dictOfNoOfDocumentsWithTermInside)):
                 if word[0] == dictOfNoOfDocumentsWithTermInside[x][0]:
-                    listOfIdfCalcs.append((word[0], math.log(documents/ dictOfNoOfDocumentsWithTermInside[x][1])))
+                    if dictOfNoOfDocumentsWithTermInside[x][1] != 0:
+                        listOfIdfCalcs.append((word[0], math.log(documents/dictOfNoOfDocumentsWithTermInside[x][1])))
         dicOfIDFNoDublicates[i] = listOfIdfCalcs
 
     #print(dicOfIDFNoDublicates)
@@ -191,33 +196,45 @@ with open('test.csv', 'r') as csv_file:
 
 #------------Filter Security bug report's features---------
     listOfSecFeatures = []
+    secResult = []
+    finalSecList = []
     for x in range(0,documents):
         if TF_IDF_Sec[x][1] == ['1']:
             listOfSecFeatures.append((TF_IDF_Sec[x][0]))
-    #print(len(listOfSecFeatures))
     #print(listOfSecFeatures)
+    for x in range(0,len(listOfSecFeatures)):
+        for y in range(0,len(listOfSecFeatures[x])):
+            secResult.append(listOfSecFeatures[x][y])
+
+    sortedlistSec = sorted(secResult, key=lambda x: x[1])
+    sortedlistSec.reverse()
+    finalSecList.append(sortedlistSec[:50])
+
+    #for x in range(0,50):
+        #print(finalSecList[0][x][0])
 
 #------------Filter Non Security bug report's features---------
     listOfNonSecFeatures = []
+    nonSecResult = []
+    FinalNonSecList = []
     for x in range(0,documents):
         if TF_IDF_Sec[x][1] == ['0']:
             listOfNonSecFeatures.append((TF_IDF_Sec[x][0]))
     #print(listOfNonSecFeatures)
-    #print(len(listOfNonSecFeatures[0]))
+    for x in range(0,len(listOfNonSecFeatures)):
+        for y in range(0,len(listOfNonSecFeatures[x])):
+            nonSecResult.append(listOfNonSecFeatures[x][y])
 
-#-----------Calculate Common features------------------------
-    listOfCommonFeatures = []
-    for w in range(0,len(listOfSecFeatures)):
-        for x in range(0,len(listOfSecFeatures[w])):
-            for y in range(0,len(listOfNonSecFeatures)):
-                for z in range(0,len(listOfNonSecFeatures[y])):
-                    if listOfSecFeatures[w][x][0] == listOfNonSecFeatures[y][z][0]:
-                        #print('security words')
-                        #print(listOfSecFeatures[w][x])
-                        #print('Non Security words')
-                        #print(listOfNonSecFeatures[y][z])
-                        #print(w,x)
-                        listOfCommonFeatures.append((listOfSecFeatures[w][x][0]))
+    sortedlistNon = sorted(nonSecResult, key=lambda x: x[1])
+    sortedlistNon.reverse()
+    FinalNonSecList.append(sortedlistNon[:50])
+    print(FinalNonSecList)
+    #for x in range(0,50):
+        #print(FinalNonSecList[0][x][0])
+
+
+
+
 
 
 
