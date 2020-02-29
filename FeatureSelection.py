@@ -13,7 +13,7 @@ detoken = ''
 
 
 
-with open('Ambari.csv', 'r') as csv_file:
+with open('testing.csv', 'r') as csv_file:
     csv_reader = csv.reader(csv_file)
 
 # ---calculate the TF--
@@ -76,7 +76,7 @@ with open('Ambari.csv', 'r') as csv_file:
 
 # First: put togather all sentance and tokenize them
     allDocuments = ''
-with open('Ambari.csv', 'r') as csv_file:
+with open('testing.csv', 'r') as csv_file:
     csv_reader = csv.reader(csv_file)
 
 
@@ -113,7 +113,7 @@ with open('Ambari.csv', 'r') as csv_file:
 
 #second: calculate the number of documents where term t appear
 dictOfNoOfDocumentsWithTermInside = {}
-with open('Ambari.csv', 'r') as csv_file:
+with open('testing.csv', 'r') as csv_file:
     csv_reader = csv.reader(csv_file)
     detokenizedWord = []
     for index, sentence in enumerate(csv_reader):
@@ -162,6 +162,7 @@ with open('Ambari.csv', 'r') as csv_file:
                 if word[0] == dictOfNoOfDocumentsWithTermInside[x][0]:
                     if dictOfNoOfDocumentsWithTermInside[x][1] != 0:
                         listOfIdfCalcs.append((word[0], math.log(documents/dictOfNoOfDocumentsWithTermInside[x][1])))
+        #print(listOfIdfCalcs)
         dicOfIDFNoDublicates[i] = listOfIdfCalcs
 
     #print(dicOfIDFNoDublicates)
@@ -180,6 +181,7 @@ with open('Ambari.csv', 'r') as csv_file:
             if TFsentence[x][0] == IDFsentence[x][0]:
                listOfTF_IDF.append((TFsentence[x][0], TFsentence[x][1] * IDFsentence[x][1]))
             #print(TFsentence[x][0])
+
         dictOfTF_IDF[i] = listOfTF_IDF
     #print(dictOfTF_IDF)
 
@@ -209,9 +211,14 @@ with open('Ambari.csv', 'r') as csv_file:
     sortedlistSec = sorted(secResult, key=lambda x: x[1])
     sortedlistSec.reverse()
     finalSecList.append(sortedlistSec[:50])
+    #print(finalSecList)
 
-    #for x in range(0,50):
+    FinalSecList = []
+    for x in range(0,50):
         #print(finalSecList[0][x][0])
+        FinalSecList.append(finalSecList[0][x][0])
+    #print(FinalSecList)
+
 
 #------------Filter Non Security bug report's features---------
     listOfNonSecFeatures = []
@@ -228,9 +235,40 @@ with open('Ambari.csv', 'r') as csv_file:
     sortedlistNon = sorted(nonSecResult, key=lambda x: x[1])
     sortedlistNon.reverse()
     FinalNonSecList.append(sortedlistNon[:50])
-    print(FinalNonSecList)
-    #for x in range(0,50):
+    FinalNoNList = []
+    for x in range(0, 50):
         #print(FinalNonSecList[0][x][0])
+        FinalNoNList.append(FinalNonSecList[0][x][0])
+    #print(FinalSecList)
+    #print(FinalNoNList)
+    EndFeatureList = []
+
+    EndFeatureList = FinalSecList+FinalNoNList
+    #print(EndFeatureList)
+    EndFeatureDict = {}
+    #print(EndFeatureList)
+
+    EndFeatureDict = EndFeatureList
+    #print(EndFeatureDict)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
