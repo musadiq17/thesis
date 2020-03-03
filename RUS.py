@@ -53,9 +53,11 @@ with open('testing.csv', 'r') as csv_file:
         allTokenizedWord[index] = tokenizedWord
     #print(allTokenizedWord)
     NoDublicateDict = {}
+    #print(allTokenizedWord)
     for i in range(0, documents):
         NoDubliacteTerms = []
         for word in allTokenizedWord[i]:
+
             if word not in NoDubliacteTerms:
                 NoDubliacteTerms.append(word)
             NoDublicateDict[i] = NoDubliacteTerms
@@ -69,27 +71,25 @@ with open('testing.csv', 'r') as csv_file:
         Text = NoDublicateDict[i]
         Sec = SecDict[i]
         Id_Text_Sec.append((Issue,Text,Sec))
-    #print(Id_Text_Sec[1][0])
-    #print(len(Id_Text_Sec[0][1]))
-    #print(Id_Text_Sec[1][2])
+
 # -----------Write CSV File---------------------------
 with open('Features.csv', 'w', newline='') as f:
     thewriter = csv.writer(f)
-    Label = ''
-    fieldnames = EndFeatureDict
+
+    Label = ['label']
+    Id_No = ['id']
+    EndFeatureDictt = Id_No + EndFeatureDict + Label
+    fieldnames = EndFeatureDictt
     thewriter = csv.DictWriter(f, fieldnames=fieldnames)
     thewriter.writeheader()
 
 
 #-----------Check features in bug reports-------------
-    #print(EndFeatureDict)
-
-
-
     totalDict = {}
     for x in range(0,documents):
         #print(Id_Text_Sec[x][0])
         totalList = []
+
         for y in range(0,len(Id_Text_Sec[x][1])):
             for i in range(0, 100):
                 if EndFeatureDict[i] == Id_Text_Sec[x][1][y]:
@@ -97,59 +97,48 @@ with open('Features.csv', 'w', newline='') as f:
                     val = "1"
                     #print(val)
                     #print(Id_Text_Sec[x][1][y])
-                    totalList.append((EndFeatureDict[i],val))
-        #print(totalList)
+                    totalList.append((EndFeatureDict[i]))
+
 
 
         totalDict[x] = totalList
 
+    #print(totalDict[1][1])
+    #print(EndFeatureDict)
 
+#---------------------Testing--------------------------
+    ZeroDict = {}
+    for x in range(0, documents):
+        ZeroList = []
+        for y in range(0, len(totalDict[x])):
+            for i in range(0, 100):
+                #print(EndFeatureDict[i])
+                #print(totalDict[x][y])
+                if EndFeatureDict[i] != totalDict[x][y]:
+                    ZeroList.append(EndFeatureDict[i])
+        ZeroDict[x] = ZeroList
+    print(ZeroDict)
 
 #---------------------put values in csv file-------------------------
     newList = []
+    #print(Id_Text_Sec[1][0][0])
     for i in range(0, documents):
         list = totalDict[i]
         newList.append(list)
-
+    #print(newList[1][2])
     for x in range(0,documents):
         KeyDict = {}
+        combineDict = {}
         for y in range(0,len(newList[x])):
-            #print(newList[x][y][0])
-            KeyDict[newList[x][y][0]] = 1
 
-        thewriter.writerow(KeyDict)
+            KeyDict[newList[x][y]] = 1
+        #print(KeyDict)
 
+        Id_no = {'id': Id_Text_Sec[x][0][0]}
+        secLabel = {'label': Id_Text_Sec[x][2][0]}
+        combineDict = {**Id_no,**KeyDict, ** secLabel}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-                #print(EndFeatureDict[i])
-                #print(Id_Text_Sec[x][1][y])
-        #print(Id_Text_Sec[x][2])
-
-
-
-
-
-    #            if EndFeatureDict[i] == allTokenizedWord[x][y]:
-
-    #                Value = '1'
-    #            else:
-    #                Value = '0'
-
-
-    #            totalList.append((EndFeatureDict[i],Value))
-    #print(totalList)
+        thewriter.writerow(combineDict)
 
 
 
