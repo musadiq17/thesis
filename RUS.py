@@ -81,10 +81,10 @@ with open('Features.csv', 'w', newline='') as f:
     thewriter.writeheader()
 
 
-    #-----------Check features in bug reports-------------
+#-----------Check features in bug reports-------------
     #print(EndFeatureDict)
 
-    #totalDict = []
+
 
     totalDict = {}
     for x in range(0,documents):
@@ -96,9 +96,16 @@ with open('Features.csv', 'w', newline='') as f:
                     #print(EndFeatureDict[i])
                     val = "1"
                     #print(val)
+                    #print(Id_Text_Sec[x][1][y])
                     totalList.append((EndFeatureDict[i],val))
         #print(totalList)
+
+
         totalDict[x] = totalList
+
+
+
+#---------------------put values in csv file-------------------------
     newList = []
     for i in range(0, documents):
         list = totalDict[i]
@@ -107,7 +114,9 @@ with open('Features.csv', 'w', newline='') as f:
     for x in range(0,documents):
         KeyDict = {}
         for y in range(0,len(newList[x])):
+            #print(newList[x][y][0])
             KeyDict[newList[x][y][0]] = 1
+
         thewriter.writerow(KeyDict)
 
 
