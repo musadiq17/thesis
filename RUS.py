@@ -103,21 +103,20 @@ with open('Features.csv', 'w', newline='') as f:
 
         totalDict[x] = totalList
 
-    #print(totalDict[1][1])
+    #print(totalDict)
     #print(EndFeatureDict)
+    FeaturesDict = {}
+    for x in range(0,100):
+        FeaturesDict[x] = EndFeatureDict[x]
+
+
 
 #---------------------Testing--------------------------
-    ZeroDict = {}
-    for x in range(0, documents):
-        ZeroList = []
-        for y in range(0, len(totalDict[x])):
-            for i in range(0, 100):
-                #print(EndFeatureDict[i])
-                #print(totalDict[x][y])
-                if EndFeatureDict[i] != totalDict[x][y]:
-                    ZeroList.append(EndFeatureDict[i])
-        ZeroDict[x] = ZeroList
-    print(ZeroDict)
+    print(totalDict)
+    print(FeaturesDict)
+
+
+
 
 #---------------------put values in csv file-------------------------
     newList = []
