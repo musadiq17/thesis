@@ -77,8 +77,8 @@ with open('Features.csv', 'w', newline='') as f:
     thewriter = csv.writer(f)
 
     Label = ['label']
-    Id_No = ['id']
-    EndFeatureDictt = Id_No + EndFeatureDict + Label
+    #Id_No = ['id']
+    EndFeatureDictt = EndFeatureDict + Label
     fieldnames = EndFeatureDictt
     thewriter = csv.DictWriter(f, fieldnames=fieldnames)
     thewriter.writeheader()
@@ -86,6 +86,7 @@ with open('Features.csv', 'w', newline='') as f:
 
 #-----------Check features in bug reports-------------
     totalDict = {}
+    totalDict2 = {}
     for x in range(0,documents):
         #print(Id_Text_Sec[x][0])
         totalList = []
@@ -98,24 +99,23 @@ with open('Features.csv', 'w', newline='') as f:
                     #print(val)
                     #print(Id_Text_Sec[x][1][y])
                     totalList.append((EndFeatureDict[i]))
-
-
-
+        #print(totalList)
         totalDict[x] = totalList
-
-    #print(totalDict)
+    print(totalDict)
     #print(EndFeatureDict)
     FeaturesDict = {}
     for x in range(0,100):
         FeaturesDict[x] = EndFeatureDict[x]
+    for totalDict_key, totalDict_value in totalDict.items():
+        totalList2 = []
+        for key, value in FeaturesDict.items():
+            if value not in totalDict_value:
+                totalList2.append(value)
+        #print(totalList2)
+        #print(len(totalList2))
 
-
-
-#---------------------Testing--------------------------
-    print(totalDict)
-    print(FeaturesDict)
-
-
+        totalDict2[totalDict_key] = totalList2
+    #print(totalDict2)
 
 
 #---------------------put values in csv file-------------------------
@@ -124,20 +124,32 @@ with open('Features.csv', 'w', newline='') as f:
     for i in range(0, documents):
         list = totalDict[i]
         newList.append(list)
+    newList2 = []
+    for i in range(0,documents):
+        list2 = totalDict2[i]
+        newList2.append(list2)
+
     #print(newList[1][2])
     for x in range(0,documents):
         KeyDict = {}
+        KeyDict2 = {}
+        TotalKeyDict = {}
         combineDict = {}
         for y in range(0,len(newList[x])):
 
             KeyDict[newList[x][y]] = 1
         #print(KeyDict)
-
-        Id_no = {'id': Id_Text_Sec[x][0][0]}
+        for y in range(0,len(newList2[x])):
+            KeyDict2[newList2[x][y]] = 0
+        #rint(KeyDict2)
+        TotalKeyDict = {**KeyDict, **KeyDict2}
+        #print(TotalKeyDict)
+        #Id_no = {'id': Id_Text_Sec[x][0][0]}
         secLabel = {'label': Id_Text_Sec[x][2][0]}
-        combineDict = {**Id_no,**KeyDict, ** secLabel}
-
-        thewriter.writerow(combineDict)
+        combineDict = {**TotalKeyDict, ** secLabel}
+        if combineDict['label'] == '1' or combineDict['label'] == '0':
+            #print(combineDict)
+            thewriter.writerow(combineDict)
 
 
 
