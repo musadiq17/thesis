@@ -2,18 +2,24 @@ import csv
 import math
 from nltk.tokenize import word_tokenize
 from nltk.corpus import stopwords
+import nltk
 from string import punctuation
 from nltk.stem import PorterStemmer
 from nltk.tokenize.treebank import TreebankWordDetokenizer
 from collections import Counter
 punct = set(punctuation)
-stop_words = set(stopwords.words("english"))
+stop_words = nltk.corpus.stopwords.words('english')
+#print(stop_words)
 port = PorterStemmer()
 detoken = ''
+AmbunwantedTerms = ['.sh',':1.','taskcontroller.cfg', 'web-ui','400', 'true/false', '64-bit', ':service_check/exec[hcatsmoke', '.task','zookeeper', ':hcat', '/stage[2]/hdp-hcat',
+'dn*', ']/returns', '.tracker.task-controller', '/var/www/cgi-bin','two-way','--','39' ]
+stop_words = stop_words + AmbunwantedTerms
+#print(stop_words)
+#print(punct)
 
 
-
-with open('testing.csv', 'r') as csv_file:
+with open('Ambari.csv', 'r') as csv_file:
     csv_reader = csv.reader(csv_file)
 
 # ---calculate the TF--
@@ -35,7 +41,7 @@ with open('testing.csv', 'r') as csv_file:
         lowerBug = bug.lower()
 
         tokenized_stop = word_tokenize(lowerBug)
-
+        #print(tokenized_stop)
         tokenizedWord = [w for w in tokenized_stop if not w in stop_words and not w in punct]
         tokenizedWord = []
         for w in tokenized_stop:
@@ -76,7 +82,7 @@ with open('testing.csv', 'r') as csv_file:
 
 # First: put togather all sentance and tokenize them
     allDocuments = ''
-with open('testing.csv', 'r') as csv_file:
+with open('Ambari.csv', 'r') as csv_file:
     csv_reader = csv.reader(csv_file)
 
 
@@ -113,7 +119,7 @@ with open('testing.csv', 'r') as csv_file:
 
 #second: calculate the number of documents where term t appear
 dictOfNoOfDocumentsWithTermInside = {}
-with open('testing.csv', 'r') as csv_file:
+with open('Ambari.csv', 'r') as csv_file:
     csv_reader = csv.reader(csv_file)
     detokenizedWord = []
     for index, sentence in enumerate(csv_reader):

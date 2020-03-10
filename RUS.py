@@ -2,19 +2,27 @@ import csv
 import math
 from nltk.tokenize import word_tokenize
 from nltk.corpus import stopwords
+import nltk
 from string import punctuation
 from nltk.stem import PorterStemmer
+from FeatureSelection import EndFeatureDict
 from nltk.tokenize.treebank import TreebankWordDetokenizer
 from collections import Counter
-from FeatureSelection import EndFeatureDict
 punct = set(punctuation)
-stop_words = set(stopwords.words("english"))
+stop_words = nltk.corpus.stopwords.words('english')
+#print(stop_words)
 port = PorterStemmer()
 detoken = ''
+AmbunwantedTerms = ['.sh',':1.','taskcontroller.cfg', 'web-ui','400', 'true/false', '64-bit', ':service_check/exec[hcatsmoke', '.task','zookeeper', ':hcat', '/stage[2]/hdp-hcat',
+'dn*', ']/returns', '.tracker.task-controller', '/var/www/cgi-bin','two-way','--' ]
+stop_words = stop_words + AmbunwantedTerms
+
+#print(stop_words)
+#print(punct)
 
 
 
-with open('testing.csv', 'r') as csv_file:
+with open('Ambari.csv', 'r') as csv_file:
     csv_reader = csv.reader(csv_file)
 
 # ---calculate the TF--
@@ -101,7 +109,7 @@ with open('Features.csv', 'w', newline='') as f:
                     totalList.append((EndFeatureDict[i]))
         #print(totalList)
         totalDict[x] = totalList
-    print(totalDict)
+    #print(totalDict)
     #print(EndFeatureDict)
     FeaturesDict = {}
     for x in range(0,100):
