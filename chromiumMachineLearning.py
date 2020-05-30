@@ -11,7 +11,7 @@ from sklearn.naive_bayes import GaussianNB
 from sklearn.metrics import confusion_matrix
 from sklearn.metrics import accuracy_score
 from imblearn.under_sampling import AllKNN
-df = pd.read_csv('derbyFeatures.csv')
+df = pd.read_csv('chromiumFeatures.csv')
 #print(df.head())
 #print(df)
 target = 'label'
@@ -23,7 +23,7 @@ Y = df.loc[:, df.columns==target]
 nr = AllKNN()
 X_train_miss, Y_train_miss = nr.fit_sample(X, Y)
 
-X_train, X_test, Y_train, Y_test = train_test_split(X_train_miss, Y_train_miss, test_size=0.33, random_state=43)
+X_train, X_test, Y_train, Y_test = train_test_split(X_train_miss, Y_train_miss, test_size=0.33, random_state=79)
 
 clf1 = LogisticRegression()
 clf2 = DecisionTreeClassifier()
