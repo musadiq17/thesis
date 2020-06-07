@@ -202,62 +202,39 @@ with open('wicket.csv', 'r') as csv_file:
         #print(SecTag)
         #for x in range(len(SecTag)):
         TF_IDF_Sec.append((TF_IDF,SecTag))
-    #print(TF_IDF_Sec)
+    #print(TF_IDF_Sec[0][0])
 
-#------------Filter Security bug report's features---------
+    # ------------Filter Security bug report's features---------
     listOfSecFeatures = []
     secResult = []
     finalSecList = []
-    for x in range(0,documents):
-        if TF_IDF_Sec[x][1] == ['1']:
-            listOfSecFeatures.append((TF_IDF_Sec[x][0]))
-    #print(listOfSecFeatures)
-    for x in range(0,len(listOfSecFeatures)):
-        for y in range(0,len(listOfSecFeatures[x])):
+    for x in range(0, documents):
+        listOfSecFeatures.append((TF_IDF_Sec[x][0]))
+    # print(listOfSecFeatures)
+    for x in range(0, len(listOfSecFeatures)):
+        for y in range(0, len(listOfSecFeatures[x])):
             secResult.append(listOfSecFeatures[x][y])
 
     sortedlistSec = sorted(secResult, key=lambda x: x[1])
     sortedlistSec.reverse()
-    finalSecList.append(sortedlistSec[:50])
-    #print(finalSecList)
+    finalSecList.append(sortedlistSec[:100])
+    # print(finalSecList)
 
     FinalSecList = []
-    for x in range(0,50):
-        #print(finalSecList[0][x][0])
+    for x in range(0, 100):
+        # print(finalSecList[0][x][0])
         FinalSecList.append(finalSecList[0][x][0])
-    #print(FinalSecList)
+    # print(FinalSecList)
 
-
-#------------Filter Non Security bug report's features---------
-    listOfNonSecFeatures = []
-    nonSecResult = []
-    FinalNonSecList = []
-    for x in range(0,documents):
-        if TF_IDF_Sec[x][1] == ['0']:
-            listOfNonSecFeatures.append((TF_IDF_Sec[x][0]))
-    #print(listOfNonSecFeatures)
-    for x in range(0,len(listOfNonSecFeatures)):
-        for y in range(0,len(listOfNonSecFeatures[x])):
-            nonSecResult.append(listOfNonSecFeatures[x][y])
-
-    sortedlistNon = sorted(nonSecResult, key=lambda x: x[1])
-    sortedlistNon.reverse()
-    FinalNonSecList.append(sortedlistNon[:50])
-    FinalNoNList = []
-    for x in range(0, 50):
-        #print(FinalNonSecList[0][x][0])
-        FinalNoNList.append(FinalNonSecList[0][x][0])
-    #print(FinalSecList)
-    #print(FinalNoNList)
     EndFeatureList = []
 
-    EndFeatureList = FinalSecList+FinalNoNList
-    #print(EndFeatureList)
+    EndFeatureList = FinalSecList
+    # print(EndFeatureList)
     EndFeatureDict = {}
-    #print(EndFeatureList)
+    # print(EndFeatureList)
 
     EndFeatureDict = EndFeatureList
-    #print(EndFeatureDict)
+    print(EndFeatureDict)
 
 
 
