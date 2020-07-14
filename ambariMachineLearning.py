@@ -29,12 +29,14 @@ G_measure = 0
 Recall = 0
 Precision = 0
 F_measure = 0
-
+ACC= 0
+PFF = 0
 for train_index, test_index in skf.split(X, Y):
     #print("TRAIN:", train_index, "TEST:", test_index)
     X_train, X_test = X.loc[train_index], X.loc[test_index]
     y_train, y_test = Y.loc[train_index], Y.loc[test_index]
-
+    #print(X_train)
+    #print(X_test)
     X_train_S, y_train_S = nr.fit_sample(X_train, y_train)
     #print(X_train_S)
     #print(y_train_S)
@@ -56,10 +58,14 @@ for train_index, test_index in skf.split(X, Y):
     #print('Probability of Detection', PD)
     PF = (fp / (fp + tn)) * 100
     #print('Probability of False Alarm', PF)
+    PFF += PF
     PREC = (tp / (tp + fp)) * 100
     #PREC = PREC
     Precision += PREC
     #print('Precision', PREC)
+    Accuracy = ((tp + tn) / (tp + tn + fp + fn)) * 100
+    ACC += Accuracy
+
     f_measure = (2 * PD * PREC) / (PD + PREC)
 
     F_measure += f_measure
@@ -67,9 +73,10 @@ for train_index, test_index in skf.split(X, Y):
     g_measure = (2 * PD * (100 - PF)) / (PD + (100 - PF))
     G_measure += g_measure
     #print('G MEASURE',g_measure)
-
+#print('Accuracy', ACC/10)
 print('Precision', Precision/10)
-print('Recall', Recall/10)
+print('PD', Recall/10)
+print('PF', PFF/10)
 print('F_Measure', F_measure/10)
 print('G_MEASURE', G_measure/10)
 

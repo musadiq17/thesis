@@ -12,15 +12,13 @@ stop_words = nltk.corpus.stopwords.words('english')
 #print(stop_words)
 port = PorterStemmer()
 detoken = ''
-unwantedTerms = ['.465427.n5.nabble','://camel','://www.nabble','.apache.camel','&lt','/&gt','%22-aka-%22wildcard','jms-message','.java','camel-file','%22-address--tp20475674s22882p20494645.html',
-'%3a-how-to-bind-to-%22anylocal','.com/interceptsendtoendpoint-http-component-tp3296620p3296620.html','.com/jetty-and-mina','http_path','one-jar','.apache.camel.component','...',
-'.to(',';import','.util.exchange',':start']
+unwantedTerms = ['&lt','&quot' ,'.org', '.html' ,'.dll' , 'abarth@chromium',';/script&gt' ,';&gt' ,'...',';&lt' ,'.exe' ,'.com','--','*-','0','' ]
 stop_words = stop_words + unwantedTerms
 #print(stop_words)
 #print(punct)
 
 
-with open('camel.csv', 'r') as csv_file:
+with open('Chromium.csv', 'r', encoding="utf8") as csv_file:
     csv_reader = csv.reader(csv_file)
 
 # ---calculate the TF--
@@ -30,15 +28,14 @@ with open('camel.csv', 'r') as csv_file:
     SecDict = {}
     for index, sentence in enumerate(csv_reader):
         documents = index+1
-        summary = sentence[13]
-        description = sentence[14]
-        security = sentence[26]
+
+        security = sentence[3]
         SecList = []
         SecList.append(security)
 
         SecDict[index] = SecList
 
-        bug = summary + description
+        bug = sentence[2]
         lowerBug = bug.lower()
 
         tokenized_stop = word_tokenize(lowerBug)
@@ -83,15 +80,13 @@ with open('camel.csv', 'r') as csv_file:
 
 # First: put togather all sentance and tokenize them
     allDocuments = ''
-with open('camel.csv', 'r') as csv_file:
+with open('Chromium.csv', 'r', encoding="utf8") as csv_file:
     csv_reader = csv.reader(csv_file)
 
 
     for index, sentence in enumerate(csv_reader):
 
-        summary = sentence[13]
-        description = sentence[14]
-        bug = summary + description
+        bug = sentence[2]
         lowerBug = bug.lower()
         tokenized_stop = word_tokenize(lowerBug)
         tokenizedWord = [w for w in tokenized_stop if not w in stop_words and not w in punct]
@@ -120,14 +115,13 @@ with open('camel.csv', 'r') as csv_file:
 
 #second: calculate the number of documents where term t appear
 dictOfNoOfDocumentsWithTermInside = {}
-with open('camel.csv', 'r') as csv_file:
+with open('Chromium.csv', 'r', encoding="utf8") as csv_file:
     csv_reader = csv.reader(csv_file)
     detokenizedWord = []
     for index, sentence in enumerate(csv_reader):
 
-        summary = sentence[13]
-        description = sentence[14]
-        bug = summary + description
+
+        bug = sentence[2]
         lowerBug = bug.lower()
         tokenized_stop = word_tokenize(lowerBug)
         tokenizedWord = [w for w in tokenized_stop if not w in stop_words and not w in punct]
@@ -201,7 +195,7 @@ with open('camel.csv', 'r') as csv_file:
         #print(SecTag)
         #for x in range(len(SecTag)):
         TF_IDF_Sec.append((TF_IDF,SecTag))
-    #print(TF_IDF_Sec)
+    print('TF IDF',TF_IDF_Sec)
 
 #------------Filter Security bug report's features---------
     listOfSecFeatures = []
@@ -224,7 +218,7 @@ with open('camel.csv', 'r') as csv_file:
     for x in range(0,50):
         #print(finalSecList[0][x][0])
         FinalSecList.append(finalSecList[0][x][0])
-    #print(FinalSecList)
+    print(FinalSecList)
 
 
 #------------Filter Non Security bug report's features---------
@@ -234,7 +228,7 @@ with open('camel.csv', 'r') as csv_file:
     for x in range(0,documents):
         if TF_IDF_Sec[x][1] == ['0']:
             listOfNonSecFeatures.append((TF_IDF_Sec[x][0]))
-    #print(listOfNonSecFeatures)
+    print(listOfNonSecFeatures)
     for x in range(0,len(listOfNonSecFeatures)):
         for y in range(0,len(listOfNonSecFeatures[x])):
             nonSecResult.append(listOfNonSecFeatures[x][y])
@@ -246,17 +240,17 @@ with open('camel.csv', 'r') as csv_file:
     for x in range(0, 50):
         #print(FinalNonSecList[0][x][0])
         FinalNoNList.append(FinalNonSecList[0][x][0])
-    #print(FinalSecList)
-    #print(FinalNoNList)
+    print('Final Sec List',FinalSecList)
+    print('Final Non Sec List',FinalNoNList)
     EndFeatureList = []
 
     EndFeatureList = FinalSecList+FinalNoNList
     #print(EndFeatureList)
     EndFeatureDict = {}
-    print(EndFeatureList)
+    #print(EndFeatureList)
 
     EndFeatureDict = EndFeatureList
-    #print(EndFeatureDict)
+    print(EndFeatureDict)
 
 
 
