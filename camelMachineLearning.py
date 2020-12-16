@@ -5,13 +5,11 @@ import pandas as pd
 from sklearn.linear_model import LogisticRegression
 from sklearn.ensemble import VotingClassifier
 from sklearn.naive_bayes import GaussianNB
+
 from sklearn.metrics import confusion_matrix
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.model_selection import KFold
 from imblearn.under_sampling import RandomUnderSampler
-from sklearn.svm import SVC
-from sklearn.neighbors import KNeighborsClassifier
-from sklearn.neural_network import MLPClassifier
 df = pd.read_csv('CamelFeatures.csv')
 #print(df.head())
 #print(df)
@@ -41,14 +39,13 @@ for train_index, test_index in skf.split(X, Y):
     #print(X_train)
     #print(X_test)
     X_train_S, y_train_S = nr.fit_sample(X_train, y_train)
-    print(X_train_S)
+    #print(X_train_S)
     #print(y_train_S)
     clf1 = LogisticRegression()
     clf2 = DecisionTreeClassifier()
 
     clf3 = GaussianNB()
-    clf4 = MLPClassifier()
-    clf5 = KNeighborsClassifier()
+
     evc = VotingClassifier(estimators=[('lr', clf1), ('dt', clf2), ('nb', clf3)], voting='soft')
     result = evc.fit(X_train_S, np.ravel(y_train_S))
     Y_Test_Pred = result.predict(X_test)
@@ -82,7 +79,7 @@ for train_index, test_index in skf.split(X, Y):
     #print('G MEASURE',g_measure)
 #print('Accuracy', ACC/10)
 print('Precision', Precision/10)
-print('Recall', Recall/10)
+print('PD', Recall/10)
 print('PF', PFF/10)
 print('F_Measure', F_measure/10)
 print('G_MEASURE', G_measure/10)

@@ -1,6 +1,5 @@
 
 import numpy as np
-from sklearn.naive_bayes import MultinomialNB
 import pandas as pd
 from sklearn.linear_model import LogisticRegression
 from sklearn.ensemble import VotingClassifier

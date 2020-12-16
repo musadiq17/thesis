@@ -255,7 +255,7 @@ with open('derby.csv', 'r') as csv_file:
     #print(EndFeatureList)
 
     EndFeatureDict = EndFeatureList
-    #print(EndFeatureDict)
+    print(EndFeatureDict)
 
 
 

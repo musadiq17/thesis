@@ -255,7 +255,7 @@ with open('Ambari.csv', 'r') as csv_file:
     #print(EndFeatureList)
 
     EndFeatureDict = EndFeatureList
-    #print(EndFeatureDict)
+    print(EndFeatureDict)
 
 
 

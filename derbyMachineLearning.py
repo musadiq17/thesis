@@ -4,7 +4,7 @@ from sklearn.naive_bayes import MultinomialNB
 import pandas as pd
 from sklearn.linear_model import LogisticRegression
 from sklearn.ensemble import VotingClassifier
-from sklearn.naive_bayes import GaussianNB,MultinomialNB
+from sklearn.naive_bayes import GaussianNB
 from sklearn.metrics import confusion_matrix
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.model_selection import KFold
@@ -36,13 +36,15 @@ for train_index, test_index in skf.split(X, Y):
     X_train, X_test = X.loc[train_index], X.loc[test_index]
     y_train, y_test = Y.loc[train_index], Y.loc[test_index]
     #print(X_train)
+    #print(y_train)
     #print(X_test)
+    #print(y_test)
     X_train_S, y_train_S = nr.fit_sample(X_train, y_train)
     #print(X_train_S)
     #print(y_train_S)
     clf1 = LogisticRegression()
     clf2 = DecisionTreeClassifier()
-    #clf3 = MultinomialNB()
+
     clf3 = GaussianNB()
     evc = VotingClassifier(estimators=[('lr', clf1), ('dt', clf2), ('nb', clf3)], voting='hard')
     result = evc.fit(X_train_S, np.ravel(y_train_S))
